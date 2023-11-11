@@ -58,5 +58,5 @@ curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -
 
 
 # With LXAppearance you can change themes, icons, cursors or fonts.
-sudo pacman -S lxappearance
+sudo pacman -S lxappearance --needed --noconfirm
 

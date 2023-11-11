@@ -46,7 +46,6 @@ sudo pacman -S rxvt-unicode ranger rofi dmenu --needed --noconfirm
 sudo pacman -S firefox vlc --needed --noconfirm
 
 # Install other tools
-sudo pacman -S docker --needed --noconfirm
 paru -S docker-desktop --needed --noconfirm
 
 # Install ZSH & oh my zsh
@@ -56,4 +55,8 @@ curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -
     echo "Y" | sh /tmp/install.sh 
 
 # Config ZSH
+
+
+# With LXAppearance you can change themes, icons, cursors or fonts.
+sudo pacman -S lxappearance
 

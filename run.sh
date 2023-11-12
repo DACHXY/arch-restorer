@@ -104,7 +104,7 @@ InstallAntigen
 # With LXAppearance you can change themes, icons, cursors or fonts.
 sudo pacman -S lxappearance --needed --noconfirm
 
-# refresh zshrc
+# refresh
 source "$HOME/.zshrc"
 
 

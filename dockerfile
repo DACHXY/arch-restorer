@@ -9,11 +9,12 @@ RUN useradd -m danny && \
 
 RUN pacman -S sudo --noconfirm
 
-COPY run.sh /run.sh
-
-RUN chmod +x /run.sh
-RUN chmod 777 /run.sh
-
 USER danny
-WORKDIR /home/danny
-CMD ["su", "danny", "-c", "/run.sh"]
+WORKDIR /home/danny/scripts/
+
+RUN mkdir -p /home/danny/scripts/
+COPY . /home/danny/scripts/
+RUN sudo chmod +x /home/danny/scripts/run.sh
+RUN sudo chmod 777 /home/danny/scripts/run.sh
+
+CMD ["su", "danny", "-c", "/home/danny/scripts/run.sh"]

@@ -1,5 +1,5 @@
 #!/bin/sh
-export ZSH_CONFIG="$./zshconfig"
+export ZSH_CONFIG="./src/zshconfig"
 export ZSH_SCRIPTS="./src/zshconfig/scripts"
 
 InstallParu() {
@@ -7,7 +7,6 @@ InstallParu() {
     cd paru_temp
     makepkg -si --needed --noconfirm 
     cd ../
-    pwd
     sudo rm -rf paru_temp
 }
 
@@ -18,23 +17,30 @@ InstallOhMyZSH() {
 }
 
 InstallZJumper() {
+    echo "Installing Z..."
     wget "https://raw.githubusercontent.com/rupa/z/master/z.sh" -O "$ZSH_SCRIPTS/z.sh"
+    sudo chmod +x "$ZSH_SCRIPTS/z.sh"
+    sudo chmod 777 "$ZSH_SCRIPTS/z.sh"
 }
 
 InstallAntigen() {
+    echo "Installing Antigen..."
     curl -L git.io/antigen > "$ZSH_SCRIPTS/antigen.zsh"
+    sudo chmod +x "$ZSH_SCRIPTS/antigen.zsh"
+    sudo chmod 777 "$ZSH_SCRIPTS/antigen.zsh"
 }
 
 ConfigZSH() {
-    mkdir -p $ZSH_SCRIPTS
-    cp ./src/zshrc "$HOME/.zshrc"
-    cp -r ./src/zshconfig "$HOME/.zshconfig" 
+    cp "src/zshrc" "$HOME/.zshrc"
+    cp -r "src/zshconfig" "$HOME/.zshconfig" 
+    sudo chmod -R +x "$HOME/.zshconfig"
+    sudo chmod +x "$HOME/.zshrc"
 }
 
 sudo -v
 sudo pacman -Syyu --needed --noconfirm
-sudo pacman -S iw wpa_supplicant dialog intel-ucode git reflector lshw unzip htop --needed --noconfirm
-sudo pacman -S curl wget pulseaudio alsa-utils alsa-plugins pavucontrol xdg-user-dirs --needed --noconfirm
+sudo pacman -S iw wpa_supplicant dialog intel-ucode reflector lshw htop alsa-utils alsa-plugins pavucontrol xdg-user-dirs pulseaudio --needed --noconfirm
+sudo pacman -S curl unzip nano git wget --needed --noconfirm
 sudo pacman -S base-devel --needed --noconfirm
 
 # Install paru
@@ -83,9 +89,6 @@ paru -S docker-desktop --needed --noconfirm
 # Install ZSH & oh my zsh
 sudo pacman -S zsh --needed --noconfirm
 
-# Config ZSH
-ConfigZSH
-
 # Install Oh My ZSH
 OH_MY_ZSH_DIR="$HOME/.oh-my-zsh"
 if [ -d "$OH_MY_ZSH_DIR" ]; then
@@ -95,11 +98,17 @@ else
     InstallOhMyZSH
 fi
 
+
+# Config ZSH
+mkdir -p $ZSH_SCRIPTS
+
 # Install Z
 InstallZJumper
 
 # Install Antigen (zsh plugin install tool)
 InstallAntigen
+
+ConfigZSH
 
 # With LXAppearance you can change themes, icons, cursors or fonts.
 # sudo pacman -S lxappearance --needed --noconfirm

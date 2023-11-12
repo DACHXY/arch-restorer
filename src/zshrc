@@ -1,0 +1,27 @@
+# === Applications & Scripts === #
+source ~/z.sh
+
+# === Functions === #
+# SSH Agent when SSH connected
+run_ssh_agent() {
+    eval $(ssh-agent)
+    ssh-add ~/.ssh/dachxy_git_rsa
+}
+
+# Run app silently
+run_silent() {
+    "$@" &> /dev/null
+}
+
+# === PATH === #
+export PATH="$PATH:$HOME/bin"
+export PATH="$PATH:/opt/pulsesecure/bin/"
+
+# === When In A SSH Session === #
+if [[ -n $SSH_CONNECTION ]]; then
+    run_silent run_ssh_agent
+fi
+
+
+
+

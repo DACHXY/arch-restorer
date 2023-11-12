@@ -1,4 +1,28 @@
 #!/bin/sh
+
+InstallParu() {
+    git clone https://aur.archlinux.org/paru.git paru_temp
+    cd paru_temp
+    makepkg -si --needed --noconfirm 
+    cd ../
+    pwd
+    sudo rm -rf paru_temp
+}
+
+InstallOhMyZSH() {
+    curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o /tmp/install.sh &&
+    sed -i 's/CHSH=no/CHSH=yes/g' /tmp/install.sh &&
+    echo "Y" | sh /tmp/install.sh 
+}
+
+InstallZJumper() {
+    wget "https://raw.githubusercontent.com/rupa/z/master/z.sh" -O ~/z.sh
+}
+
+ConfigZSH() {
+    cat ./src/zshrc >> ~/.zshrc
+}
+
 sudo -v
 sudo pacman -Syyu --needed --noconfirm
 sudo pacman -S iw wpa_supplicant dialog intel-ucode git reflector lshw unzip htop --needed --noconfirm
@@ -6,18 +30,18 @@ sudo pacman -S curl wget pulseaudio alsa-utils alsa-plugins pavucontrol xdg-user
 sudo pacman -S base-devel --needed --noconfirm
 
 # Install paru
-git clone https://aur.archlinux.org/paru.git paru_temp
-cd paru_temp
-makepkg -si --needed --noconfirm 
-cd ../
-sudo rm -rf paru_temp
+if command -v paru &> /dev/null ; then
+    echo "Paru is installed."
+else
+    echo "Paru is not installed."
+    InstallParu
+fi
 
 # Improve laptop battery consumption
 sudo pacman -S bluez bluez-utils blueman --needed --noconfirm
 sudo systemctl enable bluetooth
 sudo pacman -S tlp tlp-rdw powertop acpi --needed --noconfirm
 sudo systemctl enable tlp
-sudo systemctl enable tlp-sleep
 sudo systemctl mask systemd-rfkill.service
 sudo systemctl mask systemd-rfkill.socket
 
@@ -50,12 +74,21 @@ paru -S docker-desktop --needed --noconfirm
 
 # Install ZSH & oh my zsh
 sudo pacman -S zsh --needed --noconfirm
-curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o /tmp/install.sh &&
-    sed -i 's/CHSH=no/CHSH=yes/g' /tmp/install.sh &&
-    echo "Y" | sh /tmp/install.sh 
+
+# Install Oh My ZSH
+OH_MY_ZSH_DIR=~/.oh-my-zsh
+if [ -d "$OH_MY_ZSH_DIR" ]; then
+    echo "Oh My Zsh is installed."
+else
+    echo "Oh My Zsh is not installed."
+    InstallOhMyZSH
+fi
+
+# Install Z
+InstallZJumper
 
 # Config ZSH
-
+ConfigZSH
 
 # With LXAppearance you can change themes, icons, cursors or fonts.
 sudo pacman -S lxappearance --needed --noconfirm

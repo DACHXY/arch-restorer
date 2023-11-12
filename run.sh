@@ -1,6 +1,6 @@
 #!/bin/sh
 sudo -v
-sudo pacman -Syyu
+sudo pacman -Syyu --needed --noconfirm
 sudo pacman -S iw wpa_supplicant dialog intel-ucode git reflector lshw unzip htop --needed --noconfirm
 sudo pacman -S curl wget pulseaudio alsa-utils alsa-plugins pavucontrol xdg-user-dirs --needed --noconfirm
 sudo pacman -S base-devel --needed --noconfirm

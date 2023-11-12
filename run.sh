@@ -1,4 +1,6 @@
 #!/bin/sh
+export ZSH_CONFIG="$./zshconfig"
+export ZSH_SCRIPTS="./src/zshconfig/scripts"
 
 InstallParu() {
     git clone https://aur.archlinux.org/paru.git paru_temp
@@ -16,11 +18,18 @@ InstallOhMyZSH() {
 }
 
 InstallZJumper() {
-    wget "https://raw.githubusercontent.com/rupa/z/master/z.sh" -O ~/z.sh
+    wget "https://raw.githubusercontent.com/rupa/z/master/z.sh" -O "$ZSH_SCRIPTS/z.sh"
+}
+
+InstallAntigen() {
+    curl -L git.io/antigen > "$ZSH_SCRIPTS/antigen.zsh"
 }
 
 ConfigZSH() {
-    cat ./src/zshrc >> ~/.zshrc
+    mkdir -p $ZSH_SCRIPTS
+    cp ./src/zshrc "$HOME/.zshrc"
+    cp -r ./src/zshconfig "$HOME/.zshconfig" 
+    source "$HOME/.zshrc"
 }
 
 sudo -v
@@ -67,13 +76,16 @@ sudo pacman -S ttf-cascadia-code-nerd --needed --noconfirm
 sudo pacman -S rxvt-unicode ranger rofi dmenu --needed --noconfirm
 
 # Install some GUI programs
-sudo pacman -S firefox vlc --needed --noconfirm
+sudo pacman -S firefox vlc opera --needed --noconfirm
 
 # Install other tools
 paru -S docker-desktop --needed --noconfirm
 
 # Install ZSH & oh my zsh
 sudo pacman -S zsh --needed --noconfirm
+
+# Config ZSH
+ConfigZSH
 
 # Install Oh My ZSH
 OH_MY_ZSH_DIR=~/.oh-my-zsh
@@ -87,8 +99,8 @@ fi
 # Install Z
 InstallZJumper
 
-# Config ZSH
-ConfigZSH
+# Install Antigen (zsh plugin install tool)
+InstallAntigen
 
 # With LXAppearance you can change themes, icons, cursors or fonts.
 sudo pacman -S lxappearance --needed --noconfirm

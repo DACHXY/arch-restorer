@@ -75,7 +75,7 @@ sudo pacman -S ttf-cascadia-code-nerd --needed --noconfirm
 sudo pacman -S rxvt-unicode ranger rofi dmenu --needed --noconfirm
 
 # Install some GUI programs
-sudo pacman -S firefox vlc opera --needed --noconfirm
+sudo pacman -S firefox vlc opera code --needed --noconfirm
 
 # Install other tools
 paru -S docker-desktop --needed --noconfirm

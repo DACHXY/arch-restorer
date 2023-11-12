@@ -102,6 +102,8 @@ InstallZJumper
 # Install Antigen (zsh plugin install tool)
 InstallAntigen
 
+source "$HOME/.zshrc"
+
 # With LXAppearance you can change themes, icons, cursors or fonts.
 sudo pacman -S lxappearance --needed --noconfirm
 

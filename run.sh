@@ -29,7 +29,6 @@ ConfigZSH() {
     mkdir -p $ZSH_SCRIPTS
     cp ./src/zshrc "$HOME/.zshrc"
     cp -r ./src/zshconfig "$HOME/.zshconfig" 
-    source "$HOME/.zshrc"
 }
 
 sudo -v
@@ -88,7 +87,7 @@ sudo pacman -S zsh --needed --noconfirm
 ConfigZSH
 
 # Install Oh My ZSH
-OH_MY_ZSH_DIR=~/.oh-my-zsh
+OH_MY_ZSH_DIR="$HOME/.oh-my-zsh"
 if [ -d "$OH_MY_ZSH_DIR" ]; then
     echo "Oh My Zsh is installed."
 else
@@ -102,8 +101,11 @@ InstallZJumper
 # Install Antigen (zsh plugin install tool)
 InstallAntigen
 
-source "$HOME/.zshrc"
-
 # With LXAppearance you can change themes, icons, cursors or fonts.
 sudo pacman -S lxappearance --needed --noconfirm
+
+# refresh zshrc
+source "$HOME/.zshrc"
+
+
 

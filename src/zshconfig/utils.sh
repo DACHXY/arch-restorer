@@ -2,7 +2,9 @@
 # SSH Agent when SSH connected
 run_ssh_agent() {
     eval $(ssh-agent)
-    ssh-add "$HOME/.ssh/dachxy_git_rsa"
+    if [[ -e "$HOME/.ssh/dachxy_git_rsa" ]]; then
+        ssh-add "$HOME/.ssh/dachxy_git_rsa"
+    fi
 }
 
 # Run app silently

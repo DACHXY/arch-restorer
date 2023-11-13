@@ -98,7 +98,6 @@ else
     InstallOhMyZSH
 fi
 
-
 # Config ZSH
 mkdir -p $ZSH_SCRIPTS
 

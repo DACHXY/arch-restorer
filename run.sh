@@ -37,6 +37,9 @@ InstallDependencies() {
 InstallTools() {
     # Tools
     pacman_install curl unzip nano git wget 
+    
+    # wallpaper manager
+    pacman_install feh
 }
 
 InstallParu() {
@@ -99,6 +102,11 @@ Configi3wm(){
     cp -f "$src" "$des"
 }
 
+ConfigWallpaperManager(){
+    mkdir -f "$HOME/.wallpapers"
+    cp -rf "./src/wallpapers" "$HOME/.wallpapers"
+}
+
 sudo -v
 sudo pacman -Syyu --needed --noconfirm
 
@@ -136,7 +144,7 @@ pacman_install ttf-cascadia-code-nerd
 # Install tools on i3
 pacman_install kitty ranger rofi dmenu xss-lock
 
-# Install some GUI programs
+# Install some GUI programs 
 pacman_install firefox vlc opera code
 
 # Install other tools
@@ -165,6 +173,9 @@ InstallAntigen
 
 # Config zshrc
 ConfigZSH
+
+# Config Wallpapers
+ConfigWallpaperManager
 
 # Config i3 wm
 Configi3wm

@@ -6,7 +6,7 @@ set $mod Mod4
 exec_always --no-startup-id picom -b --config /home/$USER/.config/picom.conf
 
 # === Set Font === #
-font pango:DejaVu Sans Mono 14
+font pango:CaskaydiaCove Nerd Font Mono 14
 
 # === XDG autostart === #
 exec --no-startup-id dex --autostart --environment i3
@@ -26,8 +26,13 @@ tiling_drag modifier titlebar
 floating_modifier $mod  
 
 # === Window Setting === #
-# hide window title
-for_window [class="^.*"] title_format ""   
+# Hide window title
+default_border pixel 0
+default_floating_border pixel 0
+
+# Gaps
+gaps inner 14
+
 
 # === Workspaces === #
 set $ws1 "1"

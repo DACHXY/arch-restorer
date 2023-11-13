@@ -6,11 +6,11 @@ export DOTFILE_PATH="./src/dotfiles"
 
 # pacman install with no-confirm & needed
 pacman_install() {
-    sudo pacman -S --needed --noconfirm "$@"
+    sudo pacman -Sq --needed --noconfirm "$@"
 }
 
 paru_install() {
-    paru -S --needed --noconfirm "$@" 
+    paru -Sq --needed --noconfirm "$@" 
 }
 
 InstallDependencies() {
@@ -67,6 +67,24 @@ InstallAntigen() {
     sudo chmod 777 "$ZSH_SCRIPTS/antigen.zsh"
 }
 
+Installi3wm() {
+    # Install i3 dependency
+    pacman_install xorg-server xorg-apps xorg-xinit
+    pacman_install i3 i3-gaps i3blocks i3lock numlockx
+}
+
+ConfigSystem() {
+    # Let user control wireless system
+    sudo systemctl mask systemd-rfkill.service
+    sudo systemctl mask systemd-rfkill.socket
+
+    # Enable SSD TRIM
+    sudo systemctl enable fstrim.timer
+
+    # Enable Network Manager
+    sudo systemctl enable NetworkManager
+}
+
 ConfigZSH() {
     cp "src/zshrc" "$HOME/.zshrc"
     cp -r "src/zshconfig" "$HOME/.zshconfig" 
@@ -75,8 +93,8 @@ ConfigZSH() {
 }
 
 Configi3wm(){
-    des = "$CONFIG_PATH/i3/config"
-    src = "$DOTFILE_PATH/i3config"
+    $des = "$CONFIG_PATH/i3/config"
+    $src = "$DOTFILE_PATH/i3config"
     chmod 777 "$src"
     cp -f "$src" "$des"
 }
@@ -85,10 +103,10 @@ sudo -v
 sudo pacman -Syyu --needed --noconfirm
 
 InstallDependencies
+InstallTools
 
-# Let user control wireless system
-sudo systemctl mask systemd-rfkill.service
-sudo systemctl mask systemd-rfkill.socket
+# Install i3 window manager
+Installi3wm
 
 # Install paru
 if command -v paru &> /dev/null ; then
@@ -98,12 +116,8 @@ else
     InstallParu
 fi
 
-# Enable SSD TRIM
-sudo systemctl enable fstrim.timer
-
-# Install i3 dependency
-pacman_install xorg-server xorg-apps xorg-xinit
-pacman_install i3 i3-gaps i3blocks i3lock numlockx
+# Config System setting
+ConfigSystem
 
 # Install Compositor
 pacman_install picom

@@ -4,10 +4,9 @@ export ZSH_SCRIPTS="./src/zshconfig/scripts"
 export CONFIG_PATH="$HOME/.config"
 export DOTFILE_PATH="./src/dotfiles"
 
-mkdir -fp "$CONFIG_PATH/i3"
-mkdir -fp "$CONFIG_PATH/kitty"
-mkdir -fp "$ZSH_SCRIPTS"
-
+mkdir -p "$CONFIG_PATH/i3"
+mkdir -p "$CONFIG_PATH/kitty"
+mkdir -p "$ZSH_SCRIPTS"
 
 # pacman install with no-confirm & needed
 pacman_install() {
@@ -101,8 +100,15 @@ ConfigZSH() {
 }
 
 ConfigKitty() {
+    if [ ! -d "$CONFIG_PATH/kitty/" ]; then
+        mkdir -p "$CONFIG_PATH/kitty/"
+    fi
     cp -f "$DOTFILE_PATH/kitty.conf" "$CONFIG_PATH/kitty/kitty.conf"
     cp -f "$DOTFILE_PATH/mocha.conf" "$CONFIG_PATH/kitty/mocha.conf"
+}
+
+ConfigPicom() {
+    cp -f "$DOTFILE_PATH/picom.conf" "$CONFIG_PATH/picom.conf"
 }
 
 Configi3wm(){
@@ -113,10 +119,11 @@ Configi3wm(){
 }
 
 ConfigWallpaperManager(){
-    mkdir -f "$HOME/.wallpapers"
+    mkdir -p "$HOME/.wallpapers"
     cp -rf "./src/wallpapers" "$HOME/.wallpapers"
 }
 
+# === Main === #
 sudo -v
 sudo pacman -Syyu --needed --noconfirm
 
@@ -184,6 +191,7 @@ ConfigZSH
 # Config Some tools
 ConfigWallpaperManager
 ConfigKitty
+ConfigPicom
 
 # Config i3 wm
 Configi3wm

@@ -22,7 +22,7 @@ set $refresh_i3status killall -SIGUSR1 i3status
 set $wallpaper_path ~/.wallpapers
 
 # === Wallpaper === #
-exec_always --no-startup-id feh --recursive --bg-fill --randomize $wallpaper_path
+exec --no-startup-id feh --recursive --bg-fill --randomize $wallpaper_path
 
 # === Window Control === #
 # mouse+mod frag floating windows

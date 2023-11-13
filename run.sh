@@ -4,6 +4,11 @@ export ZSH_SCRIPTS="./src/zshconfig/scripts"
 export CONFIG_PATH="$HOME/.config"
 export DOTFILE_PATH="./src/dotfiles"
 
+mkdir -fp "$CONFIG_PATH/i3"
+mkdir -fp "$CONFIG_PATH/kitty"
+mkdir -fp "$ZSH_SCRIPTS"
+
+
 # pacman install with no-confirm & needed
 pacman_install() {
     sudo pacman -Sq --needed --noconfirm "$@"
@@ -23,7 +28,7 @@ InstallDependencies() {
     pacman_install iw wpa_supplicant wireless_tools networkmanager network-manager-applet 
 
     # System Tool
-    pacman_install gnome-keyring dialog intel-ucode reflector lshw htop alsa-utils alsa-plugins pavucontrol xdg-user-dirs pulseaudio 
+    pacman_install ibus gnome-keyring dialog intel-ucode reflector lshw htop alsa-utils alsa-plugins pavucontrol xdg-user-dirs pulseaudio 
 
     # Bluetooh
     pacman_install bluez bluez-utils blueman 
@@ -95,10 +100,15 @@ ConfigZSH() {
     sudo chmod +x "$HOME/.zshrc"
 }
 
+ConfigKitty() {
+    cp -f "$DOTFILE_PATH/kitty.conf" "$CONFIG_PATH/kitty/kitty.conf"
+    cp -f "$DOTFILE_PATH/mocha.conf" "$CONFIG_PATH/kitty/mocha.conf"
+}
+
 Configi3wm(){
     des="$CONFIG_PATH/i3/config"
     src="$DOTFILE_PATH/i3config"
-    chmod 777 "$src"
+    sudo chmod 777 "$src"
     cp -f "$src" "$des"
 }
 
@@ -144,10 +154,10 @@ pacman_install ttf-cascadia-code-nerd
 # Install tools on i3
 pacman_install kitty ranger rofi dmenu xss-lock
 
-# Install some GUI programs 
+# # Install some GUI programs 
 pacman_install firefox vlc opera code
 
-# Install other tools
+# # Install other tools
 paru_install docker-desktop
 
 # Install ZSH & oh my zsh
@@ -162,9 +172,6 @@ else
     InstallOhMyZSH
 fi
 
-# Config ZSH
-mkdir -p $ZSH_SCRIPTS
-
 # Install Z (dir jumper)
 InstallZJumper
 
@@ -174,8 +181,9 @@ InstallAntigen
 # Config zshrc
 ConfigZSH
 
-# Config Wallpapers
+# Config Some tools
 ConfigWallpaperManager
+ConfigKitty
 
 # Config i3 wm
 Configi3wm

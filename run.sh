@@ -128,7 +128,7 @@ ConfigWallpaperManager(){
 
 ConfigLightDM() {
     sudo cp "./src/user.face" "/usr/share/icons/user.face"
-    sudo sed -i 's/^\(#?greeter\)-session\s*=\s*\(.*\)/greeter-session = lightdm-webkit2-greeter #\1/ #\2g' /etc/lightdm/lightdm.conf
+    sudo sed -i 's/^#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/' /etc/lightdm/lightdm.conf
     sudo cat "$DOTFILE_PATH/lightdm-webkit2-greeter.conf" > /etc/lightdm/lightdm-webkit2-greeter.conf
 }
 
@@ -154,7 +154,7 @@ fi
 ConfigSystem
 
 # Install Compositor
-pacman_install picom
+paru_install picom-allusive --sudoloop
 
 # Install display Manager
 pacman_install lightdm lightdm-webkit2-greeter

@@ -96,8 +96,8 @@ ConfigZSH() {
 }
 
 Configi3wm(){
-    $des = "$CONFIG_PATH/i3/config"
-    $src = "$DOTFILE_PATH/i3config"
+    des="$CONFIG_PATH/i3/config"
+    src="$DOTFILE_PATH/i3config"
     chmod 777 "$src"
     cp -f "$src" "$des"
 }

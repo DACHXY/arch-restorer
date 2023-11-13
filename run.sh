@@ -40,7 +40,7 @@ InstallDependencies() {
 
 InstallTools() {
     # Tools
-    pacman_install curl unzip nano git wget 
+    pacman_install curl unzip nano git wget exa
     
     # wallpaper manager
     pacman_install feh
@@ -119,8 +119,17 @@ Configi3wm(){
 }
 
 ConfigWallpaperManager(){
+    sudo mkdir -p "/usr/share/wallpapers"
     mkdir -p "$HOME/.wallpapers"
     cp -rf "./src/wallpapers" "$HOME/.wallpapers"
+    sudo cp -rf "./src/wallpapers" "/usr/share/wallpapers"
+    sudo chmod 644 /usr/share/wallpapers/*
+}
+
+ConfigLightDM() {
+    sudo cp "./src/user.face" "/usr/share/icons/user.face"
+    sudo sed -i 's/^\(#?greeter\)-session\s*=\s*\(.*\)/greeter-session = lightdm-webkit2-greeter #\1/ #\2g' /etc/lightdm/lightdm.conf
+    sudo cat "$DOTFILE_PATH/lightdm-webkit2-greeter.conf" > /etc/lightdm/lightdm-webkit2-greeter.conf
 }
 
 # === Main === #
@@ -148,7 +157,8 @@ ConfigSystem
 pacman_install picom
 
 # Install display Manager
-pacman_install lightdm lightdm-gtk-greeter
+pacman_install lightdm lightdm-webkit2-greeter
+paru_install lightdm-webkit2-theme-glorious --sudoloop
 sudo systemctl enable lightdm
 
 # Install some basic fonts
@@ -192,6 +202,7 @@ ConfigZSH
 ConfigWallpaperManager
 ConfigKitty
 ConfigPicom
+ConfigLightDM
 
 # Config i3 wm
 Configi3wm

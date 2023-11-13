@@ -1,6 +1,43 @@
 #!/bin/sh
 export ZSH_CONFIG="./src/zshconfig"
 export ZSH_SCRIPTS="./src/zshconfig/scripts"
+export CONFIG_PATH="$HOME/.config"
+export DOTFILE_PATH="./src/dotfiles"
+
+# pacman install with no-confirm & needed
+pacman_install() {
+    sudo pacman -S --needed --noconfirm "$@"
+}
+
+paru_install() {
+    paru -S --needed --noconfirm "$@" 
+}
+
+InstallDependencies() {
+    pacman_install base-devel
+
+    # Grub Tool
+    pacman_install grub 
+
+    # Network Tool
+    pacman_install iw wpa_supplicant wireless_tools networkmanager network-manager-applet 
+
+    # System Tool
+    pacman_install gnome-keyring dialog intel-ucode reflector lshw htop alsa-utils alsa-plugins pavucontrol xdg-user-dirs pulseaudio 
+
+    # Bluetooh
+    pacman_install bluez bluez-utils blueman 
+    sudo systemctl enable bluetooth
+
+    # Power
+    pacman_install tlp tlp-rdw powertop acpi 
+    sudo systemctl enable tlp
+}
+
+InstallTools() {
+    # Tools
+    pacman_install curl unzip nano git wget 
+}
 
 InstallParu() {
     git clone https://aur.archlinux.org/paru.git paru_temp
@@ -37,11 +74,21 @@ ConfigZSH() {
     sudo chmod +x "$HOME/.zshrc"
 }
 
+Configi3wm(){
+    des = "$CONFIG_PATH/i3/config"
+    src = "$DOTFILE_PATH/i3config"
+    chmod 777 "$src"
+    cp -f "$src" "$des"
+}
+
 sudo -v
 sudo pacman -Syyu --needed --noconfirm
-sudo pacman -S iw wpa_supplicant dialog intel-ucode reflector lshw htop alsa-utils alsa-plugins pavucontrol xdg-user-dirs pulseaudio --needed --noconfirm
-sudo pacman -S curl unzip nano git wget --needed --noconfirm
-sudo pacman -S base-devel --needed --noconfirm
+
+InstallDependencies
+
+# Let user control wireless system
+sudo systemctl mask systemd-rfkill.service
+sudo systemctl mask systemd-rfkill.socket
 
 # Install paru
 if command -v paru &> /dev/null ; then
@@ -51,43 +98,38 @@ else
     InstallParu
 fi
 
-# Improve laptop battery consumption
-sudo pacman -S bluez bluez-utils blueman --needed --noconfirm
-sudo systemctl enable bluetooth
-sudo pacman -S tlp tlp-rdw powertop acpi --needed --noconfirm
-sudo systemctl enable tlp
-sudo systemctl mask systemd-rfkill.service
-sudo systemctl mask systemd-rfkill.socket
-
 # Enable SSD TRIM
 sudo systemctl enable fstrim.timer
 
 # Install i3 dependency
-sudo pacman -S xorg-server xorg-apps xorg-xinit --needed --noconfirm
-sudo pacman -S i3 i3-gaps i3blocks i3lock numlockx --needed --noconfirm
+pacman_install xorg-server xorg-apps xorg-xinit
+pacman_install i3 i3-gaps i3blocks i3lock numlockx
+
+# Install Compositor
+pacman_install picom
 
 # Install display Manager
-sudo pacman -S lightdm lightdm-gtk-greeter --needed --noconfirm
+pacman_install lightdm lightdm-gtk-greeter
 sudo systemctl enable lightdm
 
 # Install some basic fonts
-sudo pacman -S noto-fonts ttf-ubuntu-font-family ttf-dejavu ttf-freefont --needed --noconfirm
-sudo pacman -S ttf-liberation ttf-droid ttf-roboto terminus-font --needed --noconfirm
+pacman_install noto-fonts ttf-ubuntu-font-family ttf-dejavu ttf-freefont
+pacman_install ttf-liberation ttf-droid ttf-roboto terminus-font
 
 # Install nerd font
-sudo pacman -S ttf-cascadia-code-nerd --needed --noconfirm
+pacman_install ttf-cascadia-code-nerd
 
 # Install tools on i3
-sudo pacman -S rxvt-unicode ranger rofi dmenu --needed --noconfirm
+pacman_install kitty ranger rofi dmenu xss-lock
 
 # Install some GUI programs
-sudo pacman -S firefox vlc opera code --needed --noconfirm
+pacman_install firefox vlc opera code
 
 # Install other tools
-paru -S docker-desktop --needed --noconfirm
+paru_install docker-desktop
 
 # Install ZSH & oh my zsh
-sudo pacman -S zsh --needed --noconfirm
+pacman_install zsh
 
 # Install Oh My ZSH
 OH_MY_ZSH_DIR="$HOME/.oh-my-zsh"
@@ -101,16 +143,17 @@ fi
 # Config ZSH
 mkdir -p $ZSH_SCRIPTS
 
-# Install Z
+# Install Z (dir jumper)
 InstallZJumper
 
 # Install Antigen (zsh plugin install tool)
 InstallAntigen
 
+# Config zshrc
 ConfigZSH
 
-# With LXAppearance you can change themes, icons, cursors or fonts.
-# sudo pacman -S lxappearance --needed --noconfirm
+# Config i3 wm
+Configi3wm
 
 # go into zsh
 zsh

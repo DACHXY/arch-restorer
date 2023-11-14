@@ -81,6 +81,7 @@ aur_packages=(
     "lightdm-webkit2-theme-glorious"
     "docker-desktop"
     "snapd"
+    "notion-app-electron"
 )
 
 # pacman install with no-confirm & needed
@@ -175,12 +176,14 @@ ConfigLightDM() {
 ConfigUser() {
     git config --global user.name DACHXY
     git config --global user.email Danny10132024@gmail.com
-    sudo usrmod -aG tty "$USER"
+
+    # Add user to tty group (vscode arduino extension)
+    sudo usermod -aG tty "$USER"
     sudo chmod a+rw /dev/ttyACM0
 }
 
 CopyDotfiles() {
-    cp -f ./src/dotfiles/* "$CONFIG_PATH"
+    cp -rf ./src/dotfiles/* "$CONFIG_PATH"
 }
 
 # === Main === #

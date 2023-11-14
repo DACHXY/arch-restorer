@@ -138,12 +138,17 @@ ConfigGit() {
     git config --global user.email Danny10132024@gmail.com
 }
 
+ConfigVScode() {
+    cp -f $DOTFILE_PATH/vscode/* "$HOME/.vscode"
+}
+
 # === Main === #
 sudo -v
 sudo pacman -Syyu --needed --noconfirm
 
 InstallDependencies
 InstallTools
+ConfigGit
 
 # Install i3 window manager
 Installi3wm
@@ -190,7 +195,7 @@ sudo ln -s /var/lib/snapd/snap /snap
 
 # Install Official vs code
 sudo snap install code --classic
-
+ConfigVScode
 
 # Install ZSH & oh my zsh
 pacman_install zsh

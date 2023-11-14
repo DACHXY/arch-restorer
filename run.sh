@@ -142,6 +142,10 @@ ConfigVScode() {
     cp -f $DOTFILE_PATH/vscode/* "$HOME/.vscode"
 }
 
+ConfigUser() {
+    sudo usrmod -aG tty "$USER"
+}
+
 # === Main === #
 sudo -v
 sudo pacman -Syyu --needed --noconfirm
@@ -149,6 +153,7 @@ sudo pacman -Syyu --needed --noconfirm
 InstallDependencies
 InstallTools
 ConfigGit
+ConfigUser
 
 # Install i3 window manager
 Installi3wm

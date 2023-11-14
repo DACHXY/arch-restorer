@@ -1,6 +1,6 @@
-FROM archlinux/archlinux
+FROM archlinux
 
-RUN pacman -Syu
+RUN pacman -Syu --noconfirm
 RUN useradd -m tempuser && \
     echo 'tempuser:12345678' | chpasswd && \
     mkdir -p /etc/sudoers.d && \

@@ -129,7 +129,13 @@ ConfigWallpaperManager(){
 ConfigLightDM() {
     sudo cp "./src/user.face" "/usr/share/icons/user.face"
     sudo sed -i 's/^#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/' /etc/lightdm/lightdm.conf
-    sudo cat "$DOTFILE_PATH/lightdm-webkit2-greeter.conf" > /etc/lightdm/lightdm-webkit2-greeter.conf
+    sudo cp -f "$DOTFILE_PATH/lightdm-webkit2-greeter.conf"  /etc/lightdm/lightdm-webkit2-greeter.conf
+    sudo chmod 644 /etc/lightdm/lightdm-webkit2-greeter.conf
+}
+
+ConfigGit() {
+    git config --global user.name DACHXY
+    git config --global user.email Danny10132024@gmail.com
 }
 
 # === Main === #
@@ -171,11 +177,20 @@ pacman_install ttf-cascadia-code-nerd
 # Install tools on i3
 pacman_install kitty ranger rofi dmenu xss-lock
 
-# # Install some GUI programs 
-pacman_install firefox vlc opera code
+# Install some GUI programs 
+pacman_install firefox vlc opera
 
-# # Install other tools
+# Install other tools
 paru_install docker-desktop
+
+# Install snapd
+paru_install snapd --sudoloop
+
+sudo ln -s /var/lib/snapd/snap /snap
+
+# Install Official vs code
+sudo snap install code --classic
+
 
 # Install ZSH & oh my zsh
 pacman_install zsh
